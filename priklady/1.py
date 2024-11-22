@@ -9,5 +9,5 @@ for temp in range(pocet):
     pole.append(-temp)
     nasobitel+=1
 
-for char in pole:
-    print(char,end=" ")
+for num in pole:
+    print(num,end=" ")

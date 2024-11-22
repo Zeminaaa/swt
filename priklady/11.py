@@ -9,4 +9,4 @@ for pismeno in text:
 for pismeno in p:
         vysledek+=(pismeno)
         vysledek+=(pismeno)
-print(vysledek)       
+print(vysledek)

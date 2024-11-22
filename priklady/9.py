@@ -20,3 +20,7 @@ for i in range(delka):
     delka-=1
 vysledek=round(vysledek)
 print(vysledek)
+
+
+# asi to nejde, na řádku 17 mám error, protože ascii tabulka vrací ve formě stringu a ne integeru.
+# když se místo float tam dá int tak to funguje, ale to nemůžu správně. bez toho to nefunguje protože mi nechce počítat se stringem.

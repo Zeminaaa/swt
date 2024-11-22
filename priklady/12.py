@@ -6,5 +6,5 @@ while True:
         break
     p.append(temp)
 
-p[1::2] = ["x"] * len(p[1::2])
+p[1::2]=["x"]*len(p[1::2])
 print(p)
