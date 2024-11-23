@@ -1,6 +1,6 @@
 velikost=int(input("zadej kolik vepsaných čtverců chceš: "))
 plny=(4*velikost)+1
-mezery=(3*velikost)+(velikost-1)-2
+mezery=(3*velikost)+(velikost-3)
 posun=0
 
 for i in range(velikost):
