@@ -3,7 +3,6 @@ p=[]
 text=input("zadej co chceš: ")
 for znak in text:
     p.append(znak)
-print(p)
 p[1::2]=["x"]*len(p[1::2])
 for znak in p:
     print(znak,end="")
