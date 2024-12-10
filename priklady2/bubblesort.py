@@ -20,5 +20,4 @@ while check_if_swapped:
             check_if_swapped=True
         posun+=1
 
-
 print(p)

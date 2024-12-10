@@ -11,7 +11,11 @@ znamky = {"001": [1, 2, 1], "002": [3, 4, 5], "003": [1, 1, 2]}
 
 #{"Anna": [1, 2, 1], "Petr": [3, 4, 5], "Lucie": [1, 1, 2]} 
 
-for jmeno,idcko in studenti.items():
-    studenti[jmeno  ]=znamky[idcko]
+p={}
 
-print(studenti)
+
+for jmeno,idcko in studenti.items():
+    p[jmeno]=jmeno
+    p[jmeno]=znamky[idcko]
+
+print(p)
