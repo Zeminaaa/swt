@@ -46,7 +46,6 @@ def vytvor_zdi(mapa):
        
         vybrany_seed=random.randint(0,pocet_seedu)  
         temp=0
-        print(f"seed:{vybrany_seed}, temp:{temp}")
         x=-1
         y=-1
         for radek in bludiste:
