@@ -20,6 +20,18 @@ def generuj_pole():
     return mapa
 
 def vytiskni_pole(mapa):
+    slovnik = {
+  0: "  ",
+  1: "# ",
+  2: "* ",
+  3: "ᗤ ",
+}
+    for radek in mapa:
+        for znak in radek:
+            print(slovnik[znak],end="")
+        print("")
+
+def vytiskni_pole_test(mapa):
     for radek in mapa:
         print(radek)
 
@@ -33,6 +45,19 @@ def vytvor_seedy(mapa):
     for y in range(2,MAPA_VYSKA-2,2):
         for x in range(2,MAPA_SIRKA-2,2):
                 mapa[y][x]=POLICKO_SEED
+
+def znic_seedy(mapa):
+    y=-1
+    x=-1
+    for radek in bludiste:
+        y+=1
+        for policko in radek:
+            x+=1
+            if policko==POLICKO_SEED:
+                roll=random.randint(0,1)
+                if roll==1:
+                    mapa[y][x]=POLICKO_ZED
+        x=-1        
 
 def vytvor_zdi(mapa):
     pocet_seedu=0
@@ -81,7 +106,24 @@ def vytvor_zdi(mapa):
                     mapa[souradnice_y][souradnice_x]=POLICKO_ZED
 
 
+def spawn_pacman(mapa):
+    mapa[1][1]=3
 
+def odpal_zdi(mapa):
+    y=-1
+    x=-1
+    zakazane_souradnice_x=[0,MAPA_SIRKA-1]
+    zakazane_souradnice_y=[0,MAPA_VYSKA-1]
+    for radek in bludiste:
+        y+=1
+        for policko in radek:
+            x+=1
+            if y not in zakazane_souradnice_y and x not in zakazane_souradnice_x:
+                if policko==POLICKO_ZED:
+                    roll=random.randint(0,2)
+                    if roll==1:
+                        mapa[y][x]=POLICKO_PRAZDNE
+        x=-1           
 
 
 
@@ -89,5 +131,8 @@ def vytvor_zdi(mapa):
 bludiste = generuj_pole()
 vytvor_okraj(bludiste)
 vytvor_seedy(bludiste)
+znic_seedy(bludiste)
 vytvor_zdi(bludiste)
+spawn_pacman(bludiste)
+#odpal_zdi(bludiste)
 vytiskni_pole(bludiste)
