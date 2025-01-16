@@ -202,7 +202,14 @@ def pohyb_enemy(mapa):
     smer=(smery[poloha_v_poli])
     print(smer)
 
+    slovnik = {
+  "right" : (1,0),
+  "left" : (-1,0),
+  "down" : (0,1),
+  "up" : (0,-1)}
 
+    mapa[y][x]=POLICKO_PRAZDNE
+    mapa[y+slovnik(smer)[1]][x+slovnik(smer)[0]]=POLICKO_ENEMY
 
 bludiste = generuj_pole(0)
 vytvor_okraj(bludiste)
@@ -218,3 +225,12 @@ mapa_vzdalenosti=generuj_pole(MAPA_SIRKA*MAPA_VYSKA)
 spocitej_vzdalenost(mapa_vzdalenosti)
 vytiskni_pole_test(mapa_vzdalenosti)
 pohyb_enemy(bludiste)
+
+while True:
+    os.system("cls")
+    vytiskni_pole(bludiste)
+
+    spocitej_vzdalenost(mapa_vzdalenosti)
+    pohyb_enemy(bludiste)
+    time.sleep(1)
+    
