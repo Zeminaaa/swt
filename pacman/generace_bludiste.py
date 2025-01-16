@@ -10,12 +10,12 @@ POLICKO_HRAC=3
 POLICKO_ENEMY=4
 POLICKO_COIN=5
 
-def generuj_pole():
+def generuj_pole(znak):
     mapa=[]
     for i in range(MAPA_VYSKA):
         temp=[]
         for i in range(MAPA_SIRKA):
-            temp.append(POLICKO_PRAZDNE)
+            temp.append(znak)
         mapa.append(temp)
     return mapa
 
@@ -25,6 +25,8 @@ def vytiskni_pole(mapa):
   1: "# ",
   2: "* ",
   3: "ᗤ ",
+  4: "E ",
+  5: "C "
 }
     for radek in mapa:
         for znak in radek:
@@ -107,7 +109,14 @@ def vytvor_zdi(mapa):
 
 
 def spawn_pacman(mapa):
-    mapa[1][1]=3
+    poloha_hrace=[1,1]
+    mapa[poloha_hrace[0]][poloha_hrace[1]]=POLICKO_HRAC
+    return (poloha_hrace[0],poloha_hrace[1])
+
+def spawn_enemy(mapa):
+    poloha_enemy=[MAPA_VYSKA-2,MAPA_SIRKA-2]
+    mapa[poloha_enemy[0]][poloha_enemy[1]]=POLICKO_ENEMY
+    return (poloha_enemy[0],poloha_enemy[1])
 
 def odpal_zdi(mapa):
     y=-1
@@ -127,12 +136,61 @@ def odpal_zdi(mapa):
 
 
 
+def spocitej_vzdalenost(mapa):
+    fronta=[]
+    y,x=spawn_pacman(mapa)
+    mapa_vzdalenosti[y][x]=0
 
-bludiste = generuj_pole()
+    fronta.append(y)
+    fronta.append(x)
+
+    pouzite_souradnice=[]
+    while True:
+        if len(fronta)==0:
+            break
+        if bludiste[fronta[0]][fronta[1]+1]==POLICKO_ENEMY:
+            break
+        elif bludiste[fronta[0]][fronta[1]+1]==POLICKO_PRAZDNE and (fronta[0],fronta[1]+1) not in pouzite_souradnice:
+            mapa_vzdalenosti[fronta[0]][fronta[1]+1]=mapa_vzdalenosti[fronta[0]][fronta[1]]+1
+            fronta.append(fronta[0])
+            fronta.append(fronta[1]+1)
+        if bludiste[fronta[0]][fronta[1]-1]==POLICKO_ENEMY:
+            break   
+        elif bludiste[fronta[0]][fronta[1]-1]==0 and (fronta[0],fronta[1]-1) not in pouzite_souradnice:
+            mapa_vzdalenosti[fronta[0]][fronta[1]-1]=mapa_vzdalenosti[fronta[0]][fronta[1]]+1
+            fronta.append(fronta[0])
+            fronta.append(fronta[1]-1)
+        if bludiste[fronta[0]+1][fronta[1]]==POLICKO_ENEMY:
+            break   
+        elif bludiste[fronta[0]+1][fronta[1]]==POLICKO_PRAZDNE and (fronta[0]+1,fronta[1]) not in pouzite_souradnice:
+            mapa_vzdalenosti[fronta[0]+1][fronta[1]]=mapa_vzdalenosti[fronta[0]][fronta[1]]+1
+            fronta.append(fronta[0]+1)
+            fronta.append(fronta[1])
+        if bludiste[fronta[0]-1][fronta[1]]==POLICKO_ENEMY:
+            break
+        elif bludiste[fronta[0]-1][fronta[1]]==POLICKO_PRAZDNE and (fronta[0]-1,fronta[1]) not in pouzite_souradnice:
+            mapa_vzdalenosti[fronta[0]-1][fronta[1]]=mapa_vzdalenosti[fronta[0]][fronta[1]]+1
+            fronta.append(fronta[0]-1)
+            fronta.append(fronta[1])
+        
+        pouzite_souradnice.append((fronta[0],fronta[1]))
+        fronta.pop(0)
+        fronta.pop(0)
+
+        
+
+
+
+bludiste = generuj_pole(0)
 vytvor_okraj(bludiste)
 vytvor_seedy(bludiste)
 znic_seedy(bludiste)
 vytvor_zdi(bludiste)
 spawn_pacman(bludiste)
+spawn_enemy(bludiste)
 #odpal_zdi(bludiste)
 vytiskni_pole(bludiste)
+
+mapa_vzdalenosti=generuj_pole("#")
+spocitej_vzdalenost(mapa_vzdalenosti)
+vytiskni_pole_test(mapa_vzdalenosti)
