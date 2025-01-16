@@ -1,4 +1,7 @@
 import random
+import time
+import os
+
 MAPA_VYSKA=11
 MAPA_SIRKA=11
 
@@ -24,9 +27,9 @@ def vytiskni_pole(mapa):
   0: "  ",
   1: "# ",
   2: "* ",
-  3: "ᗤ ",
+  3: "P ",
   4: "E ",
-  5: "C "
+  5: "$ "
 }
     for radek in mapa:
         for znak in radek:
@@ -178,6 +181,26 @@ def spocitej_vzdalenost(mapa):
         fronta.pop(0)
 
         
+def pohyb_enemy(mapa):
+    y,x=spawn_enemy(mapa)
+
+    okolni_cisla=[mapa_vzdalenosti[y][x+1],mapa_vzdalenosti[y][x-1],mapa_vzdalenosti[y+1][x],mapa_vzdalenosti[y-1][x]]
+    temp=MAPA_VYSKA*MAPA_SIRKA
+    posun=-1
+    for cislo in okolni_cisla:
+        posun+=1
+        if cislo<temp:
+            temp=cislo
+            poloha_v_poli=posun
+    
+    smery = {
+  0: "right",
+  1: "left",
+  2: "down",
+  3: "up",}
+
+    smer=(smery[poloha_v_poli])
+    print(smer)
 
 
 
@@ -191,6 +214,7 @@ spawn_enemy(bludiste)
 #odpal_zdi(bludiste)
 vytiskni_pole(bludiste)
 
-mapa_vzdalenosti=generuj_pole("#")
+mapa_vzdalenosti=generuj_pole(MAPA_SIRKA*MAPA_VYSKA)
 spocitej_vzdalenost(mapa_vzdalenosti)
 vytiskni_pole_test(mapa_vzdalenosti)
+pohyb_enemy(bludiste)
