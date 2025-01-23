@@ -141,7 +141,16 @@ def odpal_zdi(mapa):
 
 def spocitej_vzdalenost(mapa):
     fronta=[]
-    y,x=spawn_pacman(mapa)
+    cord_y=-1
+    cord_x=-1
+    for radek in bludiste:
+        cord_y+=1
+        for policko in radek:
+            cord_x+=1
+            if policko==POLICKO_HRAC:
+                y=cord_y
+                x=cord_x
+        cord_x=-1
     mapa_vzdalenosti[y][x]=0
 
     fronta.append(y)
@@ -182,7 +191,16 @@ def spocitej_vzdalenost(mapa):
 
         
 def pohyb_enemy(mapa):
-    y,x=spawn_enemy(mapa)
+    cord_y=-1
+    cord_x=-1
+    for radek in bludiste:
+        cord_y+=1
+        for policko in radek:
+            cord_x+=1
+            if policko==POLICKO_ENEMY:
+                y=cord_y
+                x=cord_x
+        cord_x=-1
 
     okolni_cisla=[mapa_vzdalenosti[y][x+1],mapa_vzdalenosti[y][x-1],mapa_vzdalenosti[y+1][x],mapa_vzdalenosti[y-1][x]]
     temp=MAPA_VYSKA*MAPA_SIRKA
@@ -199,17 +217,26 @@ def pohyb_enemy(mapa):
   2: "down",
   3: "up",}
 
-    smer=(smery[poloha_v_poli])
-    print(smer)
+    print(smery[poloha_v_poli])
 
-    slovnik = {
-  "right" : (1,0),
-  "left" : (-1,0),
-  "down" : (0,1),
-  "up" : (0,-1)}
+    pokyny_x=[1,-1,0,0]
+    pokyny_y=[0,0,1,-1]
+
 
     mapa[y][x]=POLICKO_PRAZDNE
-    mapa[y+slovnik(smer)[1]][x+slovnik(smer)[0]]=POLICKO_ENEMY
+    mapa[y+pokyny_y[poloha_v_poli]][x+pokyny_x[poloha_v_poli]]=POLICKO_ENEMY
+
+def pacman_alive_check(mapa):
+    alive=False
+    for radek in bludiste:
+        for policko in radek:
+            if policko==POLICKO_HRAC:
+                alive=True
+            
+    return(alive)
+    
+                
+
 
 bludiste = generuj_pole(0)
 vytvor_okraj(bludiste)
@@ -219,18 +246,23 @@ vytvor_zdi(bludiste)
 spawn_pacman(bludiste)
 spawn_enemy(bludiste)
 #odpal_zdi(bludiste)
-vytiskni_pole(bludiste)
 
 mapa_vzdalenosti=generuj_pole(MAPA_SIRKA*MAPA_VYSKA)
-spocitej_vzdalenost(mapa_vzdalenosti)
-vytiskni_pole_test(mapa_vzdalenosti)
-pohyb_enemy(bludiste)
 
-while True:
-    os.system("cls")
-    vytiskni_pole(bludiste)
+#vytiskni_pole_test(mapa_vzdalenosti)
+
+
+alive=True
+while alive:
+    time.sleep(0.5)
+
 
     spocitej_vzdalenost(mapa_vzdalenosti)
     pohyb_enemy(bludiste)
-    time.sleep(1)
+    if pacman_alive_check(bludiste)==False:
+        alive=False
+    os.system("cls")
+    vytiskni_pole(bludiste)
+    if alive==False:
+        print("CHYTLI TĚ!")
     
