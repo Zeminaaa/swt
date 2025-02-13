@@ -113,9 +113,9 @@ def vytvor_zdi(mapa):
 
 
 def spawn_pacman(mapa):
-    poloha_hrace=[1,1]
+    poloha_hrace=[5,5]
     mapa[poloha_hrace[0]][poloha_hrace[1]]=POLICKO_HRAC
-    return (poloha_hrace[0],poloha_hrace[1])
+    return (poloha_hrace)
 
 def spawn_enemy(mapa):
     poloha_enemy=[MAPA_VYSKA-2,MAPA_SIRKA-2]
@@ -227,7 +227,7 @@ def pohyb_enemy(mapa):
     mapa[y][x]=POLICKO_PRAZDNE
     mapa[y+pokyny_y[poloha_v_poli]][x+pokyny_x[poloha_v_poli]]=POLICKO_ENEMY
 
-def pacman_alive_check():
+def pacman_alive_check(mapa):
     alive=False
     for radek in bludiste:
         for policko in radek:
@@ -235,43 +235,8 @@ def pacman_alive_check():
                 alive=True
             
     return(alive)
-
-def smer_z_klavesnice():
-    if keyboard.is_pressed("w"):
-        smer=3
-    elif keyboard.is_pressed("s"):
-        smer=2
-    elif keyboard.is_pressed("a"):
-        smer=1
-    elif keyboard.is_pressed("d"):
-        smer=0
     
-    if len(smer)>0:
-        return(smer)
-    else:
-        return None
-    
-    
-def pohyb_hrace(mapa):
-    cord_y=-1
-    cord_x=-1
-    for radek in bludiste:
-        cord_y+=1
-        for policko in radek:
-            cord_x+=1
-            if policko==POLICKO_HRAC:
-                y=cord_y
-                x=cord_x
-        cord_x=-1
-
-    pokyny_x=[1,-1,0,0]
-    pokyny_y=[0,0,1,-1]
-
-    mapa[y][x]=POLICKO_PRAZDNE
-
-    smer=smer_z_klavesnice()
-    mapa[y+pokyny_y[smer]][x+pokyny_x[smer]]=POLICKO_HRAC  
-    pass               
+                
 
 
 bludiste = generuj_pole(0)
@@ -288,25 +253,66 @@ mapa_vzdalenosti=generuj_pole(MAPA_SIRKA*MAPA_VYSKA)
 #vytiskni_pole_test(mapa_vzdalenosti)
 
 
+
+
+
+
+timer=0
 alive=True
-temp=0
+poloha_hrace=None
+smer = ""
 while alive:
     time.sleep(0.1)
-    temp+=1
-    smer_z_klavesnice
-
+    timer+=1
     
 
-    if temp>10:
-        pohyb_hrace(bludiste)
+    if keyboard.is_pressed("esc"):
+       smer="esc"
+    if keyboard.is_pressed("down"):
+        smer="down"
+    if keyboard.is_pressed("up"):
+        smer="up"
+    if keyboard.is_pressed("left"):
+        smer="left"
+    if keyboard.is_pressed("right"):
+        smer="right"
 
+    if timer > 5:
+        
+        
+    
+        if poloha_hrace==None:
+            poloha_hrace=spawn_pacman(bludiste)
+       
+
+        if smer=="up" and bludiste[poloha_hrace[0]-1][poloha_hrace[1]]!=POLICKO_ZED:
+            bludiste[poloha_hrace[0]][poloha_hrace[1]]=POLICKO_PRAZDNE
+            bludiste[poloha_hrace[0]-1][poloha_hrace[1]]=POLICKO_HRAC
+            poloha_hrace[0]-=1
+        elif smer=="down" and bludiste[poloha_hrace[0]+1][poloha_hrace[1]]!=POLICKO_ZED:
+            bludiste[poloha_hrace[0]][poloha_hrace[1]]=POLICKO_PRAZDNE
+            bludiste[poloha_hrace[0]+1][poloha_hrace[1]]=POLICKO_HRAC
+            poloha_hrace[0]+=1
+        elif smer=="left" and bludiste[poloha_hrace[0]][poloha_hrace[1]-1]!=POLICKO_ZED:
+            bludiste[poloha_hrace[0]][poloha_hrace[1]]=POLICKO_PRAZDNE
+            bludiste[poloha_hrace[0]][poloha_hrace[1]-1]=POLICKO_HRAC
+            poloha_hrace[1]-=1
+        elif smer=="right" and bludiste[poloha_hrace[0]][poloha_hrace[1]+1]!=POLICKO_ZED:
+            bludiste[poloha_hrace[0]][poloha_hrace[1]]=POLICKO_PRAZDNE
+            bludiste[poloha_hrace[0]][poloha_hrace[1]+1]=POLICKO_HRAC
+            poloha_hrace[1]+=1
+
+
+        
 
         spocitej_vzdalenost(mapa_vzdalenosti)
         pohyb_enemy(bludiste)
-        if pacman_alive_check()==False:
+        if pacman_alive_check(bludiste)==False:
             alive=False
         os.system("cls")
         vytiskni_pole(bludiste)
         if alive==False:
             print("CHYTLI TĚ!")
-        temp=0 
+
+        timer=0
+        
